@@ -4,11 +4,20 @@ import os
 
 app = Flask(__name__)
 
-NEWSAPI_KEY = os.getenv("NEWS_API_KEY")
+# Ruta principal para probar que el servidor funciona
+@app.route("/")
+def home():
+    return "✅ API de noticias funcionando correctamente"
 
+# Ruta para obtener noticias desde NewsAPI
 @app.route("/noticias")
 def obtener_noticias():
-    url = f"https://newsapi.org/v2/top-headlines?category=business&language=es&apiKey={NEWSAPI_KEY}"
+    NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
+    url = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={NEWSAPI_KEY}"
     response = requests.get(url)
-    data = response.json()
-    return jsonify(data)
+    return jsonify(response.json())
+
+if __name__ == "__main__":
+    print("✅ ¡El archivo app.py se está ejecutando!")
+    print("🚀 Servidor Flask escuchando en http://localhost:5000")
+    app.run(host="0.0.0.0", port=5000, debug=True)
